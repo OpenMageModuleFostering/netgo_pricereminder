@@ -1,0 +1,48 @@
+<?xml version="1.0"?>
+<!--
+/***************************************
+ *** Price Drop Notifier ***
+ ***************************************
+ *
+ * @copyright   Copyright (c) 2015
+ * @company     NetAttingo Technologies
+ * @package     Netgo_Pricereminder
+ * @author 		NetGo
+ * @dev			netattingomails@gmail.com
+ *
+ */
+--> 
+<layout>
+    <adminhtml_pricereminder_netgopricereminder_index>
+        <reference name="menu">
+            <action method="setActive">
+                <menupath>netgo_pricereminder/netgopricereminder</menupath>
+            </action>
+        </reference>
+        <reference name="content">
+            <block type="netgo_pricereminder/adminhtml_netgopricereminder" name="netgopricereminder" />
+
+        </reference>
+    </adminhtml_pricereminder_netgopricereminder_index>
+    <adminhtml_pricereminder_netgopricereminder_grid>
+        <block type="core/text_list" name="root" output="toHtml">
+            <block type="netgo_pricereminder/adminhtml_netgopricereminder_grid" name="netgopricereminder_grid"/>
+        </block>
+    </adminhtml_pricereminder_netgopricereminder_grid>
+    <!-- Netgopricereminder add/edit action -->
+    <adminhtml_pricereminder_netgopricereminder_edit>
+        <update handle="editor"/>
+        <reference name="menu">
+            <action method="setActive">
+                <menupath>netgo_pricereminder/netgopricereminder</menupath>
+            </action>
+        </reference>
+        <reference name="content">
+            <block type="netgo_pricereminder/adminhtml_netgopricereminder_edit" name="netgopricereminder_edit"></block>
+        </reference>
+        <reference name="left">
+            <block type="netgo_pricereminder/adminhtml_netgopricereminder_edit_tabs" name="netgopricereminder_tabs"></block>
+        </reference>
+    </adminhtml_pricereminder_netgopricereminder_edit>
+
+</layout>

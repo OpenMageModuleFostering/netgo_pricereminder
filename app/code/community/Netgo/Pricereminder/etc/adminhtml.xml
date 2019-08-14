@@ -1,0 +1,57 @@
+<?xml version="1.0"?>
+<!--
+/***************************************
+ *** Price Drop Notifier ***
+ ***************************************
+ *
+ * @copyright   Copyright (c) 2015
+ * @company     NetAttingo Technologies
+ * @package     Netgo_Pricereminder
+ * @author 		NetGo
+ * @dev			netattingomails@gmail.com
+ *
+ */
+-->
+<config>
+    <acl>
+        <resources>
+            <admin>
+                <children>
+                    <system>
+                        <children>
+                            <config>
+                                <children>
+                                    <netgo_pricereminder translate="title" module="netgo_pricereminder">
+                                        <title>Pricereminder</title>
+                                    </netgo_pricereminder>
+                                </children>
+                            </config>
+                        </children>
+                    </system>
+                    <netgo_pricereminder translate="title" module="netgo_pricereminder">
+                        <title>Price Reminder</title>
+                        <children>
+                            <netgopricereminder translate="title" module="netgo_pricereminder">
+                                <title>Netgopricereminder</title>
+                                <sort_order>0</sort_order>
+                            </netgopricereminder>
+                        </children>
+                    </netgo_pricereminder>
+                </children>
+            </admin>
+        </resources>
+    </acl>
+    <menu>
+        <netgo_pricereminder translate="title" module="netgo_pricereminder">
+            <title>Price Reminder</title>
+            <sort_order>69</sort_order>
+            <children>
+                <netgopricereminder translate="title" module="netgo_pricereminder">
+                    <title>Netgopricereminder</title>
+                    <action>adminhtml/pricereminder_netgopricereminder</action>
+                    <sort_order>0</sort_order>
+                </netgopricereminder>
+            </children>
+        </netgo_pricereminder>
+    </menu>
+</config>

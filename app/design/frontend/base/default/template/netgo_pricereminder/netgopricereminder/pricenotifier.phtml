@@ -1,0 +1,165 @@
+<?php if(Mage::helper('netgo_pricereminder/netgopricereminder')->isEnableExtension()){
+   
+    $headbkcolor = Mage::getStoreConfig('netgo_pricereminder/popupsettings/headcolor');
+    $headtextcolor = Mage::getStoreConfig('netgo_pricereminder/popupsettings/headtextcolor');
+    $headertext = Mage::getStoreConfig('netgo_pricereminder/popupsettings/headertext');
+    $enablevariablenotifier = Mage::getStoreConfig('netgo_pricereminder/popupsettings/enablevariablenotifier');
+    $enablefixednotifier = Mage::getStoreConfig('netgo_pricereminder/popupsettings/enablefixednotifier');
+    $buttontext = Mage::getStoreConfig('netgo_pricereminder/popupsettings/buttontext');
+   
+	?>
+<div class='ngoverlay' style='display:none;'></div>
+<div class='ng_button'>
+ <span class='currency'><?php echo Mage::app()->getLocale()->currency(Mage::app()->getStore()->getCurrentCurrencyCode())->getSymbol(); ?></span><input type='button' id='ng_btn_notify' title='notify me when price gets lower ' value='<?php echo $this->__($buttontext); ?>' />
+</div>
+<div class='ng_notifier' style='display:none;background-color: #fff;border: 5px solid <?php echo $headbkcolor; ?>;color: <?php echo $headtextcolor; ?>;font-size: 13px;left: 35%;line-height: 25px;padding: 0;position: fixed;top: 30%;z-index: 99;'>
+             <span class='ng_close'>X</span>
+	<div class='ng_msg' style='clear:both;background: <?php echo $headbkcolor; ?> none repeat scroll 0 0;font-weight: bold;padding: 2px 10px 7px;text-transform: uppercase;'>
+	 <span class='ng_spn'><?php echo $this->__($headertext); ?></span>
+	</div>
+	 <div class='ng_error' style='color:red;'></div>
+	<input type='hidden' name='prod_id' id='ng_prod_id' value='<?php  echo Mage::registry('current_product')->getId(); ?>' />
+	<?php //If not logged in take email id of the customer
+	$cus_email='';
+	if(Mage::getSingleton('customer/session')->isLoggedIn()){
+		$customer = Mage::getSingleton('customer/session')->getCustomer();
+	   $cus_email =   $customer->getEmail(); 
+	}
+	  ?>
+	<div class='ng_email'>
+		<strong><?php echo $this->__('Your Email:') ?></strong> 
+		<input type='text' name='email' id='ng_email' placeholder='put your email here'  value='<?php echo $cus_email;?>'/>
+	</div>
+	 
+<?php if( $enablefixednotifier==1){ ?>
+	<div class='div_fpn'>
+		 <span class='fixpnot'><input type='radio' class='cls_r_notify' id='r_fixed' name='notifyselection' value="fixed"/>Fixed Price notifier(Notify when price reaches x)</span>
+		 <div  class='divwrp'>
+		 <input type='text'  id='txt_fpn' name='txt_fpn' value='' placeholder='Put numberic value here' style='display:none;'/>
+		 </div> 
+	</div>
+<?php } ?>
+<?php if( $enablevariablenotifier==1){ ?>
+	<div class='div_vpn'>
+		<span class='fixpnot'><input type='radio' id='r_variable' class='cls_r_notify' name='notifyselection' value="variable"/>Variable Price notifier(Notify me when price reaches below x)</span>
+		 <div  class='divwrp'>
+		<input type='text' name='txt_vpn' id='txt_vpn'  value='' placeholder='Put numberic value here' style='display:none;' /> 
+		</div>
+	</div>
+<?php } ?>
+		<div class='div_submit'>
+			<input type='button' class='submitnotifier' value='Save' style='background: #3399cc none repeat scroll 0 0;font-weight: bold;line-height: 25px;padding: 3px 15px;' />
+			<span class='ng_success' style='display:none;color:#00ff00;'></span>
+		</div>
+		
+</div>
+<script>
+ jQuery(document).ready(function(){ 
+ 
+	 jQuery('#ng_btn_notify').click(function(){ 
+		 jQuery('.ng_notifier,.ngoverlay').fadeIn();
+	 });
+	 
+	 jQuery('.ng_close').click(function(){
+	   	 jQuery('.ng_notifier,.ngoverlay').fadeOut();
+	 	 
+	 });
+	 
+	 jQuery('#r_fixed').click(function(){
+		  jQuery('#txt_vpn').hide();
+		  jQuery('#txt_fpn').show(); 
+	 });
+	 
+	  jQuery('#r_variable').click(function(){
+		 jQuery('#txt_vpn').show();
+		 jQuery('#txt_fpn').hide(); 
+	 });
+	 
+	 jQuery('.submitnotifier').click(function(){
+	  	 if(validatenotifier()){
+			 var email,notify_price,notify_option,prod_id;
+			 
+			 //get values and send ajax hit to save notify request
+             //get email			 
+				 email =jQuery('#ng_email').val();
+				 prod_id =jQuery('#ng_prod_id').val();
+				
+		    //get notify price
+				if(jQuery('#r_fixed').is(':checked')){
+					    notify_option ='fixed';
+						notify_price =  jQuery('#txt_fpn').val();		  
+				}
+				if(jQuery('#r_variable').is(':checked')){
+					    notify_option ='variable';
+						notify_price =  jQuery('#txt_vpn').val();		  
+				}
+		    //save data
+			var data ={'emailid':email,'productid':prod_id,'rprice':notify_price,'notifyoption':notify_option};
+			var url = "<?php echo str_replace('index.php/','',Mage::getBaseUrl()).'netgo_pricereminder/netgopricereminder/saveNotification'; ?>"
+			jQuery.post(url,data,function(data){
+				if(data=='success'){
+					jQuery('.ng_success').html('Your request saved successfully!!!').fadeIn().fadeOut(3000);
+					 
+				}
+			});
+		 } 	 
+	 });
+	 
+	 
+ });
+ function validatenotifier(){
+	var email = jQuery('.ng_email input').val();
+	var errormsg='';
+	if(email==''){
+	 errormsg='<li>Please Mention your Email Id </li>';
+	}else{
+		 if (!isValidEmailAddress(email)) {
+            errormsg='<li>Not a Valid Email, Please Mention valid email  </li>';
+         } 
+	}
+	 //radio buttons and fields validation
+	 var radiochecked=false;
+	 if(jQuery('#r_fixed').is(':checked')){
+		 radiochecked=true;
+		  if(jQuery('#txt_fpn').val()==''){
+			    errormsg +='<li>Please specify Price for Fixed Price Notifier  </li>';
+		  }
+          if(isNaN(jQuery('#txt_fpn').val())){
+			   errormsg +='<li>Please specify numeric value for Notifier Price </li>';
+		  }		  
+	 }
+	 
+	  if(jQuery('#r_variable').is(':checked')){
+		   radiochecked=true;
+		  if(jQuery('#txt_vpn').val()==''){
+			    errormsg +='<li>Please specify Price for Variable Price Notifier </li>';
+		  }
+          if(isNaN(jQuery('#txt_vpn').val())){
+			     errormsg +='<li>Please specify numeric value for Notifier Price  </li>';
+		  }		  
+	 }
+	 
+	 
+	 //if both visibble and none of them is checked
+	 if(radiochecked==false){
+		  //CHECK IF CHECKED
+		errormsg +='<li>Please select any option </li>';
+		 
+	 }
+	 //IF ERROR THEN RETURN FALSE
+	 if(errormsg.length>0){ 
+		 jQuery('.ng_error').html('<ol>'+errormsg+'</ol>'); 
+	 
+		 return false;
+	 }else{
+		 return true;
+	 }
+	 
+ }
+ 
+function isValidEmailAddress(emailAddress) {
+    var pattern = new RegExp(/^(("[\w-+\s]+")|([\w-+]+(?:\.[\w-+]+)*)|("[\w-+\s]+")([\w-+]+(?:\.[\w-+]+)*))(@((?:[\w-+]+\.)*\w[\w-+]{0,66})\.([a-z]{2,6}(?:\.[a-z]{2})?)$)|(@\[?((25[0-5]\.|2[0-4][\d]\.|1[\d]{2}\.|[\d]{1,2}\.))((25[0-5]|2[0-4][\d]|1[\d]{2}|[\d]{1,2})\.){2}(25[0-5]|2[0-4][\d]|1[\d]{2}|[\d]{1,2})\]?$)/i);
+    return pattern.test(emailAddress);
+} 
+</script>
+<?php } ?>

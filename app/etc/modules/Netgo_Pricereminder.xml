@@ -1,0 +1,25 @@
+<?xml version="1.0"?>
+<!--
+/***************************************
+ *** Price Drop Notifier ***
+ ***************************************
+ *
+ * @copyright   Copyright (c) 2015
+ * @company     NetAttingo Technologies
+ * @package     Netgo_Pricereminder
+ * @author 		NetGo
+ * @dev			netattingomails@gmail.com
+ *
+ */
+-->
+<config>
+    <modules>
+        <Netgo_Pricereminder>
+            <active>true</active>
+            <codePool>community</codePool>
+            <depends>
+                <Mage_Core />
+             </depends>
+        </Netgo_Pricereminder>
+    </modules>
+</config>

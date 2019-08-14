@@ -1,0 +1,16 @@
+{
+    "name": "OpenMageModuleFostering/Netgo_Pricereminder",
+    "type": "magento-module",
+    "license": "Open-Software-License-(OSL)",
+    "homepage": "",
+    "description": "Get notify to customer about price discount",
+    "authors": [
+    {
+        "name": "NetGo",
+        "email": "netattingomails@gmail.com"
+    }
+],
+    "suggest": {
+        "magento-hackathon/magento-composer-installer": "*"
+    }
+}

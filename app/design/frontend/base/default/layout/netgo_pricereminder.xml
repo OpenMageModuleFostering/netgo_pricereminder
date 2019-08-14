@@ -1,0 +1,59 @@
+<?xml version="1.0"?>
+<!--
+/***************************************
+ *** Price Drop Notifier ***
+ ***************************************
+ *
+ * @copyright   Copyright (c) 2015
+ * @company     NetAttingo Technologies
+ * @package     Netgo_Pricereminder
+ * @author 		NetGo
+ * @dev			netattingomails@gmail.com
+ *
+ */
+-->
+<layout>
+     
+	
+    <netgo_pricereminder_netgopricereminder_index translate="label" module="netgo_pricereminder">
+        <label>Netgopricereminder list</label>
+        <update handle="page_two_columns_left" />
+        <reference name="content">
+            <block type="netgo_pricereminder/netgopricereminder_list" name="netgopricereminder_list" template="netgo_pricereminder/netgopricereminder/list.phtml" />
+        </reference>
+    </netgo_pricereminder_netgopricereminder_index>
+    <netgo_pricereminder_netgopricereminder_view translate="label" module="netgo_pricereminder">
+        <label>Netgopricereminder view page</label>
+        <update handle="page_two_columns_left" />
+        <reference name="content">
+            <block type="netgo_pricereminder/netgopricereminder_view" name="netgopricereminder_view" template="netgo_pricereminder/netgopricereminder/view.phtml" />
+        </reference>
+    </netgo_pricereminder_netgopricereminder_view>
+	
+	<catalog_product_view translate="label"> 
+	<reference name ='head'>
+			<action method="addItem"><type>skin_css</type><name>css/netgo_pricereminder/pricenotifier.css</name><params/></action> 	 
+	 </reference> 
+	 
+	   <reference name="product.info.addto">
+       <action method="setTemplate">
+           <template>netgo_pricereminder/netgopricereminder/addto.phtml</template>
+       </action>
+	   <block type="core/template" name="pricenotifier"  as="netgo_pricenotifier" template="netgo_pricereminder/netgopricereminder/pricenotifier.phtml" />
+   </reference>
+	</catalog_product_view>
+	
+	<netgo_pricereminder_netgopricereminder_unsubscribeone translate="label" module="netgo_pricereminder"> 
+        <update handle="page_two_columns_left" />
+        <reference name="content">
+            <block type="core/template"   template="netgo_pricereminder/netgopricereminder/unsubscribeOne.phtml" />
+        </reference>
+    </netgo_pricereminder_netgopricereminder_unsubscribeone>
+	<netgo_pricereminder_netgopricereminder_unsubscribeall translate="label" module="netgo_pricereminder"> 
+        <update handle="page_two_columns_left" />
+        <reference name="content">
+            <block type="core/template"  template="netgo_pricereminder/netgopricereminder/unsubscribeAll.phtml" />
+        </reference>
+    </netgo_pricereminder_netgopricereminder_unsubscribeall>
+	 
+</layout>
