@@ -1,7 +1,7 @@
 {
-    "name": "OpenMageModuleFostering\/Netgo_Pricereminder",
+    "name": "openmage-module-fostering\/netgo_pricereminder",
     "type": "magento-module",
-    "license": "Open-Software-License-(OSL)",
+    "license": "OSL-3.0",
     "homepage": "",
     "description": "Get notify to customer about price discount",
     "authors": [
